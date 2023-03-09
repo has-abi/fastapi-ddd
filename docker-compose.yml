@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  python-ddd:
+    image: python_ddd
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@ddd-db:5432/python_ddd
+    depends_on:
+      - ddd-db
+    links:
+      - ddd-db
+    volumes:
+      - ./src:/usr/src/app/src
+
+  ddd-db:
+    image: ddd_db
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - '5435:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
