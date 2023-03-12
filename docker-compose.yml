@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
   python-ddd:
-    image: python_ddd
+    container_name: python-ddd
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
+    command: python ./src/server.py
     ports:
       - '8000:8000'
     environment:
@@ -15,15 +16,23 @@ services:
     links:
       - ddd-db
     volumes:
-      - ./src:/usr/src/app/src
+      - .:/usr/src/app
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z ddd-db 5432" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   ddd-db:
-    image: ddd_db
-    build:
-      context: ./db
-      dockerfile: Dockerfile
+    image: postgres:15-alpine
     ports:
       - '5435:5432'
     environment:
+      - POSTGRES_DB=python_ddd
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:

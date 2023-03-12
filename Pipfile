@@ -9,6 +9,10 @@ uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 psycopg2-binary = "*"
 dependency-injector = "*"
+pytest = "*"
+httpx = "*"
+python-dotenv = "*"
+alembic = "*"
 
 [dev-packages]
 pylint = "*"

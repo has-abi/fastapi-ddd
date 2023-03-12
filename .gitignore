@@ -169,3 +169,9 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+
+# vscode
+.vscode
+
+# sqlite test db
+test.db

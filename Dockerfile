@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM tiangolo/uvicorn-gunicorn:python3.10-slim
 
 RUN apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends \
@@ -9,8 +9,10 @@ RUN apt-get update -yqq \
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+# set env variables
 ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app"
-
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Install pipenv
 RUN pip install pipenv
@@ -28,5 +30,4 @@ COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 # Add app
 COPY . /usr/src/app
 
-# run server
-CMD ["./entrypoint.sh"]
+EXPOSE 8000

@@ -3,27 +3,26 @@ from contextlib import AbstractContextManager, contextmanager
 from typing import Callable
 
 from sqlalchemy import create_engine, orm
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, declarative_base
+
+from src.settings import Settings
 
 logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
+engine = create_engine(Settings().DATABASE_URL, echo=True)
+
 
 class Database:
-    def __init__(self, db_url: str) -> None:
-        self._engine = create_engine(db_url, echo=True)
+    def __init__(self) -> None:
         self._session_factory = orm.scoped_session(
             orm.sessionmaker(
                 autocommit=False,
                 autoflush=False,
-                bind=self._engine,
+                bind=engine,
             ),
         )
-
-    def create_database(self) -> None:
-        Base.metadata.create_all(self._engine)
 
     @contextmanager  # type: ignore
     def session(self) -> Callable[..., AbstractContextManager[Session]]:  # type: ignore

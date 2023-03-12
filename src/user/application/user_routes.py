@@ -5,10 +5,10 @@ from src.containers import Container
 from src.user.application.user_service import UserService
 from src.user.domain.user import User, UserCreate
 
-users_router = APIRouter(prefix="/users")
+users_router = APIRouter(prefix="/users", tags=["users"])
 
 
-@users_router.get("/id/{id}")
+@users_router.get("/id/{id}", response_model=(User | None))
 @inject
 def find_by_id(
     id: int, service: UserService = Depends(Provide[Container.user_service])
@@ -26,7 +26,7 @@ def find_all(
     return service.find_all(offset, page)
 
 
-@users_router.get("/username/{username}")
+@users_router.get("/username/{username}", response_model=(User | None))
 @inject
 def find_by_username(
     username: str, service: UserService = Depends(Provide[Container.user_service])
