@@ -24,9 +24,6 @@ COPY ./Pipfile.lock /usr/src/app/Pipfile.lock
 # Install python dependencies
 RUN pipenv install --system --deploy --ignore-pipfile
 
-# add entrypoint.sh
-COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
-
 # Add app
 COPY . /usr/src/app
 

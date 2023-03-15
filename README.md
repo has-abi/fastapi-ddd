@@ -18,4 +18,7 @@
 
 **Usage**: make <-target->
 
+**Note**: Database tables are not created after running docker containers you should generate db migrations using `make generate-migrations` and then apply them with `make apply-migrations`
+
+**Access API docs**: http://localhost:8000/docs
 
