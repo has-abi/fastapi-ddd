@@ -26,14 +26,15 @@ class SQLAlchemyUserRepository(UserRepository):
 
     def find_by_username(self, username: str) -> User | None:
         with self._session_manager() as session:
-            instance = session.query(UserModel).filter(UserModel.username == username).first()  # type: ignore
-            if instance:
-                return user_model_to_entity(instance)
-            return None
+            instance = (
+                session.query(UserModel).filter(UserModel.username == username).first()
+            )
+            return user_model_to_entity(instance) if instance else None
 
-    def find_by_id(self, id: int) -> User | None:
-        instance = self._find_by_id(id)
-        return user_model_to_entity(instance)
+    def find_by_id(self, id_: int) -> User | None:
+        with self._session_manager() as session:
+            instance = session.query(UserModel).filter(UserModel.id == id_).first()
+        return user_model_to_entity(instance) if instance else None
 
     def create(self, entity: UserCreate) -> User:
         instance = user_entity_to_model(entity)
@@ -47,21 +48,12 @@ class SQLAlchemyUserRepository(UserRepository):
         with self._session_manager() as session:
             instance_query = session.query(UserModel).filter(UserModel.id == entity.id)
             instance = instance_query.first()
-            if not instance:
-                raise ValueError("Entity does not exist in database.")
             instance_query.update(entity.__dict__)  # type: ignore
             session.commit()
             session.refresh(instance)
             return user_model_to_entity(instance)
 
-    def delete(self, id: int):
-        instance = self._find_by_id(id)
-        if not instance:
-            raise ValueError(f"Entity does not exist in database.")
+    def delete(self, entity: User):
         with self._session_manager() as session:
-            session.delete(instance)
+            session.delete(entity)
             session.commit()
-
-    def _find_by_id(self, id: int) -> UserModel | None:
-        with self._session_manager() as session:
-            return session.query(UserModel).get(id)
