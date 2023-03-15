@@ -1,4 +1,4 @@
-# 🚀 Python Domain Driven example using FastAPI
+# 🚀 Python Domain Driven Design example using FastAPI
 
 ## ⚙️ Makefile Commands
 
