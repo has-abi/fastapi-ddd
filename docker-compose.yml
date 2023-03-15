@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  python-ddd:
-    container_name: python-ddd
+  fastapi-ddd:
+    container_name: fastapi-ddd
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,7 +10,7 @@ services:
     ports:
       - '8000:8000'
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@ddd-db:5432/python_ddd
+      - DATABASE_URL=postgresql://postgres:postgres@ddd-db:5432/fastapi_ddd
     depends_on:
       - ddd-db
     links:
@@ -28,7 +28,7 @@ services:
     ports:
       - '5435:5432'
     environment:
-      - POSTGRES_DB=python_ddd
+      - POSTGRES_DB=fastapi_ddd
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:

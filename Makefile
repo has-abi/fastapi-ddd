@@ -36,11 +36,11 @@ docker-run: ## Run docker containers
 
 .PHONY: generate-migrations
 generate-migrations: ## Generate migrations using Alembic
-	docker-compose run --rm python-ddd alembic revision --autogenerate -m "create inital tables"
+	docker-compose run --rm fastapi-ddd alembic revision --autogenerate -m "create inital tables"
 
 .PHONY: apply-migrations
 apply-migrations: ## Apply the generated migration to database
-	docker-compose run --rm python-ddd alembic upgrade head
+	docker-compose run --rm fastapi-ddd alembic upgrade head
 
 .PHONY: help
 help:
